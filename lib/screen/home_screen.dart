@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workout_timer/component/custom_text_field.dart';
 import 'package:workout_timer/component/routine_card_button.dart';
 import 'package:workout_timer/component/splash_screen.dart';
 import 'package:workout_timer/const/colors.dart';
@@ -46,10 +47,38 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         bottom: 11.0, left: 9.0, right: 9.0),
                     child: IntrinsicHeight(
-                      child: Row(
-                        children: [
-
-                        ],
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: COLOR_M,
+                            width: 3.0,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                label: '세트수',
+                                isInt: true,
+                              ),
+                            ),
+                            const SizedBox(width: 16.0,),
+                            Expanded(
+                              child: CustomTextField(
+                                label: '운동 이름',
+                                isInt: false,
+                              ),
+                            ),
+                            const SizedBox(width: 16.0,),
+                            Expanded(
+                              child: CustomTextField(
+                                label: '휴식시간',
+                                isInt: true,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
