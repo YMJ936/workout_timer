@@ -54,6 +54,7 @@ class HomeScreen extends StatelessWidget {
                             width: 3.0,
                             style: BorderStyle.solid,
                           ),
+                          borderRadius: BorderRadius.circular(15.0),
                         ),
                         child: Row(
                           children: [
