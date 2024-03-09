@@ -3,8 +3,8 @@ import 'package:workout_timer/component/custom_text_field.dart';
 import 'package:workout_timer/component/custom_int_field.dart';
 import 'package:workout_timer/const/colors.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class RoutineCreateScreen extends StatelessWidget {
+  const RoutineCreateScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        title: Text('운동 진행 중'),
+        title: Text('운동 루틴 생성'),
         titleTextStyle: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 22.0,
@@ -41,52 +41,17 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(
                       bottom: 11.0, left: 9.0, right: 9.0),
                   child: IntrinsicHeight(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black87,
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 2.0,),
-                          Expanded(
-                            child: Text(
-                              '세트',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                            flex: 1,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 30.0,),
+                        Expanded(
+                          child: CustomTextField(
+                            label: '루틴 이름',
+                            isTitle: true,
                           ),
-                          const SizedBox(width: 50.0,),
-                          Expanded(
-                            child: Text(
-                              '운동 이름',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                            flex: 1,
-                          ),
-                          const SizedBox(width: 50.0,),
-                          Expanded(
-                            child: Text(
-                              '휴식',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                            flex: 1,
-                          ),
-                          const SizedBox(width: 2.0,),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 30.0,),
+                      ],
                     ),
                   ),
                 ),
@@ -97,58 +62,6 @@ class HomeScreen extends StatelessWidget {
                   child: IntrinsicHeight(
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 2.0,),
-                          Expanded(
-                            child: Text(
-                              '세트',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                            flex: 1,
-                          ),
-                          const SizedBox(width: 50.0,),
-                          Expanded(
-                            child: Text(
-                              '운동 이름',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                            flex: 1,
-                          ),
-                          const SizedBox(width: 50.0,),
-                          Expanded(
-                            child: Text(
-                              '휴식',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                            flex: 1,
-                          ),
-                          const SizedBox(width: 2.0,),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 11.0, left: 9.0, right: 9.0),
-                  child: IntrinsicHeight(
-                    child: Container(
-                      decoration: BoxDecoration(
                         border: Border.all(
                           color: COLOR_M,
                           width: 3.0,
@@ -231,6 +144,13 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.add_circle_outline,
+                    size: 80.0,
                   ),
                 ),
               ],
@@ -262,7 +182,7 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '운동 완료',
+                      '루틴 생성하기',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
