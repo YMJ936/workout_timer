@@ -33,20 +33,14 @@ class RoutineSelectScreen extends StatelessWidget {
       body: ListView(
         children: [
           SizedBox(height: 11.0),
-          Padding(
-            padding: const EdgeInsets.only(
-                bottom: 11.0, left: 9.0, right: 9.0),
-            child: RoutineCardButton(),
+          RoutineCardButton(
+            routineName: '3분할 루틴',
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-                bottom: 11.0, left: 9.0, right: 9.0),
-            child: RoutineCardButton(),
+          RoutineCardButton(
+            routineName: '4분할 루틴',
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-                bottom: 11.0, left: 9.0, right: 9.0),
-            child: RoutineCardButton(),
+          RoutineCardButton(
+            routineName: '5분할 루틴',
           ),
           IconButton(
             onPressed: () {},
