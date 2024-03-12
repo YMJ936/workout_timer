@@ -1,34 +1,60 @@
 class Routine {
-  String user;
   String routineName;
   List<Workout> workouts;
 
-  Routine({required this.user, required this.routineName, required this.workouts});
+  Routine({required this.routineName, required this.workouts});
+
+  factory Routine.fromJson(Map<String, dynamic> json) {
+    var workouts = json['workouts'] as List;
+    List<Workout> workoutsList = workouts.map((i) => Workout.fromJson(i)).toList();
+    return Routine(
+      routineName: json['routineName'],
+      workouts: workoutsList,
+    );
+  }
 
   Map<String, dynamic> toJson() {
-    List<Map<String, dynamic>> exercisesJson = workouts.map((exercise) => exercise.toJson()).toList();
+    List<Map<String, dynamic>> workoutsJson = workouts.map((workout) => workout.toJson()).toList();
     return {
-      'user': user,
       'routineName': routineName,
-      'exercises': exercisesJson,
+      'workouts': workoutsJson,
     };
+  }
+
+  @override
+  String toString() {
+    return 'Routine(routineName: $routineName, workouts: $workouts)';
   }
 }
 
 class Workout {
   String workoutName;
-  int order;
   int sets;
   int restTime;
+  bool isActive;
 
-  Workout({required this.workoutName, required this.order, required this.sets, required this.restTime});
+  Workout({required this.workoutName, required this.sets, required this.restTime, required this.isActive});
+
+  factory Workout.fromJson(Map<String, dynamic> json) {
+    return Workout(
+      workoutName: json['workoutName'],
+      sets: json['sets'],
+      restTime: json['restTime'],
+      isActive: json['isActive'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
-      'exerciseName': workoutName,
-      'order' : order,
+      'workoutName': workoutName,
       'sets': sets,
       'restTime': restTime,
+      'isActive': isActive,
     };
+  }
+
+  @override
+  String toString() {
+    return 'Workout(workoutName: $workoutName, sets: $sets, restTime: $restTime, isActive: $isActive)';
   }
 }

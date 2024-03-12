@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 class CustomIntField extends StatelessWidget {
   final String label; //텍스트 필드 제목
   final bool isSet; //세트인지 여부
+  final FormFieldSetter<String> onSaved;
+  final FormFieldValidator<String> validator;
 
   const CustomIntField({
     required this.label,
     required this.isSet,
+    required this.onSaved,
+    required this.validator,
     Key? key,
   }) : super(key: key);
 
@@ -26,6 +30,8 @@ class CustomIntField extends StatelessWidget {
         ),
         Expanded(
           child: TextFormField(
+            onSaved: onSaved,
+            validator: validator,
             cursorColor: Colors.grey,
             maxLines: 1, //최대  한줄
             keyboardType: TextInputType.number,

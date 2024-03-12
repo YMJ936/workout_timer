@@ -42,12 +42,12 @@ class RoutineCreateScreen extends StatelessWidget {
               child: Row(
                 children: [
                   const SizedBox(width: 30.0,),
-                  Expanded(
+                  /*Expanded(
                     child: CustomTextField(
                       label: '루틴 이름',
                       isTitle: true,
                     ),
-                  ),
+                  ),*/
                   const SizedBox(width: 30.0,),
                 ],
               ),

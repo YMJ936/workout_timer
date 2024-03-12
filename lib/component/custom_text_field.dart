@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final String label; //텍스트 필드 제목
   final bool isTitle; // 루틴명인지 여부
+  final FormFieldSetter<String> onSaved;
+  final FormFieldValidator<String> validator;
 
   const CustomTextField({
     required this.label,
     required this.isTitle,
+    required this.onSaved,
+    required this.validator,
     Key? key,
 }) : super(key: key);
 
@@ -26,6 +30,8 @@ class CustomTextField extends StatelessWidget {
         ),
         Expanded(
             child: TextFormField(
+              onSaved: onSaved,
+              validator: validator,
               cursorColor: Colors.grey,
               maxLines: 1, //최대  한줄
               keyboardType: TextInputType.multiline, //기본 숫자 키보드, 일반 글자 키보드
