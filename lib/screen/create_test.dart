@@ -9,7 +9,8 @@ import 'package:workout_timer/component/workout_making_card.dart';
 import 'package:workout_timer/const/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
-import 'package:workout_timer/model/workout.dart';
+
+import 'package:workout_timer/model/routine.dart';
 
 class CreateTest extends StatefulWidget {
   const CreateTest({Key? key}) : super(key: key);
@@ -115,7 +116,7 @@ class _CreateTest extends State<CreateTest> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    onSavePressed2();
+                    onSavePressed2('user1');
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.all(16.0),
@@ -146,37 +147,128 @@ class _CreateTest extends State<CreateTest> {
     );
   }
 
-  void onSavePressed2() {
-    List<Workout> workouts = [];
+  /*
+  void findMaxOrderByUser(String user) async {
+    final url = Uri.https(
+      'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
+      'routines.json', //저장될 json 문서명
+    );
+    try {
+      final response = await http.get(url); //DB에 요청을 보내서 받은 응답
+      final routineData = jsonDecode(response.body) as Map<String, dynamic>; //응답의 body의 내용물을 Map형태로 변환
+      print('response Map으로 변환 (routineData)');
+      print(routineData);
+
+      //final List<Routine> data = [];
+      routineData.forEach((key, value) {
+        // 여기서 value는 리스트를 포함하는 Map입니다.
+        // value를 리스트로 변환하여 처리합니다.
+        List<dynamic> routinesList = value; // JSON 구조에 따라 적절히 형변환 필요
+        routinesList.forEach((routineMap) {
+          final routine = Routine.fromJson(routineMap);
+          if(routine.user == user) {
+            print('user발견');
+            if(routine.order > maxOrder) {
+              maxOrder=routine.order;
+              print('order갱신');
+              print(maxOrder);
+            }
+          }
+        });
+      });
+
+    } catch (e) {
+      print("데이터를 가져오는 중 에러가 발생했습니다: $e");
+    }
+
+  }
+
+  */
+  void onSavePressed2(String user) async {
+    List<Routine> workoutList = [];
     formKey.currentState!.save();
+    int maxOrder = 0;
+
+    final url = Uri.https(
+      'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
+      'routines.json', //저장될 json 문서명
+    );
+    try {
+      final response = await http.get(url); //DB에 요청을 보내서 받은 응답
+      final routineData = jsonDecode(response.body) as Map<String, dynamic>; //응답의 body의 내용물을 Map형태로 변환
+      print('response Map으로 변환 (routineData)');
+      print(routineData);
+
+      //final List<Routine> data = [];
+      routineData.forEach((key, value) {
+        // 여기서 value는 리스트를 포함하는 Map입니다.
+        // value를 리스트로 변환하여 처리합니다.
+        List<dynamic> routinesList = value; // JSON 구조에 따라 적절히 형변환 필요
+        routinesList.forEach((routineMap) {
+          final routine = Routine.fromJson(routineMap);
+          if(routine.user == user) {
+            print('user발견');
+            if(routine.order > maxOrder) {
+              maxOrder=routine.order;
+              print('order갱신');
+              print(maxOrder);
+            }
+          }
+        });
+      });
+
+    } catch (e) {
+      print("데이터를 가져오는 중 에러가 발생했습니다: $e");
+    }
 
     // 각 카드에서 데이터를 수집하여 리스트로 만듦
     for (var widget in controller.workoutCards) {
       if (widget is WorkoutMakingCard) { // widget이 WorkoutMakingCard 타입인지 확인
         String? workoutName = widget.getWorkoutName;
-        int? setCount = widget.getSetCount;
+        int? sets = widget.getSets;
         int? restTime = widget.getRestTime;
 
 
-      if (workoutName != null && setCount != null && restTime != null) {
-        workouts.add(
-          Workout(
-            workoutName: workoutName,
-            sets: [
-              SetInfo(
-                setCount: setCount,
+        if (workoutName != null && sets != null && restTime != null && routineName != null) {
+          // workoutList에 해당 루틴이 이미 존재하는지 확인
+          int existingRoutineIndex = workoutList.indexWhere((routine) => routine.routineName == routineName);
+
+          if (existingRoutineIndex != -1) {
+            // 이미 존재하는 루틴에 Workout 추가
+            workoutList[existingRoutineIndex].workouts.add(
+              Workout(
+                workoutName: workoutName,
+                sets: sets,
                 restTime: restTime,
                 isActive: false,
               ),
-            ],
-          ),
-        );
-      }
+            );
+          } else {
+            // 새로운 루틴 생성하여 workoutList에 추가
+            workoutList.add(
+              Routine(
+                user: user,
+                order: maxOrder + 1,
+                routineName: routineName!,
+                workouts: [
+                  Workout(
+                    workoutName: workoutName,
+                    sets: sets,
+                    restTime: restTime,
+                    isActive: true,
+                  ),
+                ],
+              ),
+            );
+          }
+        }
       }
     }
-
     print('리스트');
-    print(workouts);
+    print(workoutList);
+    List<Map<String, dynamic>> workoutListJson = workoutList.map((routine) => routine.toJson()).toList();
+    print(jsonEncode(workoutListJson));
+    save(workoutListJson);
   }
 
   String? nameValidator(String? val) { //이름값 검증 ?는 해당 값이 null일 수도 있다고 나타내는 기호
@@ -197,39 +289,16 @@ class WorkoutMakingController extends GetxController {
 }
 
 
-void save() async { //post방식으로 realtime DB에 데이터 전송
+void save(jd) async { //post방식으로 realtime DB에 데이터 전송
   final url = Uri.https(
     'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
-        'flutter-test3.json', //저장될 json 문서명
+        'routines.json', //저장될 json 문서명
   );
+
   http.post(
     url,
     headers: {'Content_Type': 'application/json'},
-    body: jsonEncode(
-        {
-          "routine_name": "나의 루틴",
-          "workouts": [
-            {
-              "workout_name": "스쿼트",
-              "sets": [
-                {"set_count": 3, "rest_time": 10, "is_active": true},
-              ]
-            },
-            {
-              "workout_name": "푸쉬업",
-              "sets": [
-                {"set_count": 4, "rest_time": 10, "is_active": false},
-              ]
-            },
-            {
-              "workout_name": "레그 프레스",
-              "sets": [
-                {"set_count": 5, "rest_time": 10, "is_active": false},
-              ]
-            }
-          ]
-        }
-    ),
+    body: jsonEncode(jd),
   );
 
 

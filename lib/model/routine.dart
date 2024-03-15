@@ -1,13 +1,22 @@
 class Routine {
+  String user;
+  int order;
   String routineName;
   List<Workout> workouts;
 
-  Routine({required this.routineName, required this.workouts});
+  Routine({
+    required this.user,
+    required this.order,
+    required this.routineName,
+    required this.workouts,
+  });
 
   factory Routine.fromJson(Map<String, dynamic> json) {
     var workouts = json['workouts'] as List;
     List<Workout> workoutsList = workouts.map((i) => Workout.fromJson(i)).toList();
     return Routine(
+      user: json['user'],
+      order: json['order'],
       routineName: json['routineName'],
       workouts: workoutsList,
     );
@@ -16,6 +25,8 @@ class Routine {
   Map<String, dynamic> toJson() {
     List<Map<String, dynamic>> workoutsJson = workouts.map((workout) => workout.toJson()).toList();
     return {
+      'user': user,
+      'order': order,
       'routineName': routineName,
       'workouts': workoutsJson,
     };
@@ -33,7 +44,8 @@ class Workout {
   int restTime;
   bool isActive;
 
-  Workout({required this.workoutName, required this.sets, required this.restTime, required this.isActive});
+  Workout({
+    required this.workoutName, required this.sets, required this.restTime, required this.isActive});
 
   factory Workout.fromJson(Map<String, dynamic> json) {
     return Workout(

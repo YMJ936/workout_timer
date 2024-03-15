@@ -7,11 +7,11 @@ class WorkoutMakingCard extends StatelessWidget {
 
   String? workoutName;
   int? restTime;
-  int? setCount;
+  int? sets;
 
   String? get getWorkoutName => workoutName;
   int? get getRestTime => restTime;
-  int? get getSetCount => setCount;
+  int? get getSets => sets;
 
   @override build(BuildContext context) {
     return Padding(
@@ -34,7 +34,7 @@ class WorkoutMakingCard extends StatelessWidget {
                 flex: 2,
                 child: CustomIntField(
                   onSaved: (String? val) {
-                    setCount = int.parse(val!);
+                    sets = int.parse(val!);
                   },
                   validator: setValidator,
                   label: '세트 수',
