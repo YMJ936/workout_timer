@@ -34,7 +34,7 @@ class Routine {
 
   @override
   String toString() {
-    return 'Routine(routineName: $routineName, workouts: $workouts)';
+    return 'Routine(user: $user, order: $order, routineName: $routineName, workouts: $workouts)';
   }
 }
 

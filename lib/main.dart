@@ -19,7 +19,7 @@ void main() async {
 
   runApp(
       GetMaterialApp(
-        home: WorkoutScreen()//CreateTest(),
+        home: WorkoutScreen(),//RoutineSelectScreen(),//WorkoutScreen(),//CreateTest(),
       ),
   );
 }

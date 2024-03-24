@@ -117,6 +117,7 @@ class _CreateTest extends State<CreateTest> {
                 child: TextButton(
                   onPressed: () { 
                     onSavePressed2('user1');
+                    Get.back();
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.all(16.0),
