@@ -6,13 +6,18 @@ import 'package:workout_timer/component/workout_card_button.dart';
 import 'dart:async';
 import 'package:workout_timer/const/colors.dart';
 import 'package:workout_timer/controller/workout_controller.dart';
+import 'package:workout_timer/controller/workout_controller2.dart';
+import 'package:workout_timer/screen/workout_completion_screen.dart';
 
 class WorkoutScreen extends StatelessWidget {
-  const WorkoutScreen({Key? key}) : super(key: key);
+  final String user;
+  final int order;
+
+  const WorkoutScreen({Key? key, required this.user, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final WorkoutController workoutController = Get.put(WorkoutController()); //중복코드를 줄이기 위해 컨트롤러를 선언해둠
+    final WorkoutController2 workoutController = Get.put(WorkoutController2(user: user, order: order), permanent: false); //중복코드를 줄이기 위해 컨트롤러를 선언해둠
     
     return Scaffold(
       appBar: AppBar(
@@ -216,7 +221,12 @@ class WorkoutScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.off(
+                    WorkoutCompletionScreen(),
+                    transition: Transition.zoom,
+                  );
+                },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.all(16.0),
                   foregroundColor: Colors.white,

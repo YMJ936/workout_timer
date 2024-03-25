@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:workout_timer/const/colors.dart';
+import 'package:workout_timer/screen/routine_select_test.dart';
 
 class WorkoutCompletionScreen extends StatelessWidget {
   const WorkoutCompletionScreen({Key? key}) : super(key: key);
@@ -46,7 +48,12 @@ class WorkoutCompletionScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.off(
+                      RoutineSelectTest(),
+                      transition: Transition.native,
+                    );
+                  },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.all(16.0),
                     foregroundColor: Colors.white,
@@ -58,7 +65,7 @@ class WorkoutCompletionScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '메인 화면으로 돌아가기',
+                        '루틴선택 화면으로 돌아가기',
                         style: TextStyle(
                           fontSize: 19.0,
                           fontWeight: FontWeight.w500,

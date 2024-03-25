@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:workout_timer/firebase_options.dart';
 import 'package:workout_timer/screen/create_test.dart';
+import 'package:workout_timer/screen/routine_select_test.dart';
 import 'package:workout_timer/screen/workout_screen.dart';
 import 'package:workout_timer/screen/workout_completion_screen.dart';
 import 'package:workout_timer/screen/splash_screen.dart';
@@ -19,7 +20,7 @@ void main() async {
 
   runApp(
       GetMaterialApp(
-        home: WorkoutScreen(),//RoutineSelectScreen(),//WorkoutScreen(),//CreateTest(),
+        home: RoutineSelectTest(),//WorkoutScreen(),//RoutineSelectScreen(),//WorkoutScreen(),//CreateTest(),
       ),
   );
 }

@@ -9,6 +9,7 @@ import 'package:workout_timer/component/workout_making_card.dart';
 import 'package:workout_timer/const/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
+import 'package:workout_timer/controller/workout_controller.dart';
 
 import 'package:workout_timer/model/routine.dart';
 
@@ -31,6 +32,7 @@ class _CreateTest extends State<CreateTest> {
 
   @override
   Widget build(BuildContext context) {
+
     return Form(
       key: formKey,
       child: Scaffold(
@@ -115,9 +117,9 @@ class _CreateTest extends State<CreateTest> {
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: TextButton(
-                  onPressed: () { 
+                  onPressed: () {
                     onSavePressed2('user1');
-                    Get.back();
+                    Get.back(result: 'refresh');
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.all(16.0),
@@ -270,6 +272,8 @@ class _CreateTest extends State<CreateTest> {
     List<Map<String, dynamic>> workoutListJson = workoutList.map((routine) => routine.toJson()).toList();
     print(jsonEncode(workoutListJson));
     save(workoutListJson);
+    final WorkoutController workoutController = Get.find<WorkoutController>();
+    workoutController.fetchRoutines();
   }
 
   String? nameValidator(String? val) { //이름값 검증 ?는 해당 값이 null일 수도 있다고 나타내는 기호

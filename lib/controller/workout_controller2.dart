@@ -5,19 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class WorkoutController extends GetxController { //getx컨트롤러
+class WorkoutController2 extends GetxController { //getx컨트롤러
   var workoutList = <Workout>[].obs; //변수 선언 + .obs를 통해 관찰가능해짐
-  var routineList = <Routine>[].obs; // Routine 객체들을 저장할 리스트를 추가
   bool isTimerRunning = false;
+  final String user;
+  final int order;
 
+  WorkoutController2({required this.user,required this.order});
 
   @override
   void onInit() { //getx 컨트롤러가 초기화 될 때 호출됨(생성자?)
     super.onInit();
-    fetchWorkouts();
-    print('1실행!');
+      // 둘 다 값이 설정되어 있다면 fetchWorkouts2를 실행합니다.
+      fetchWorkouts2(user!, order!);
+      print(user);
+      print(order);
   }
-
+/*
   void fetchWorkouts() async {
     final url = Uri.https(
       'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
@@ -36,17 +40,10 @@ class WorkoutController extends GetxController { //getx컨트롤러
       routineData.forEach((key, value) {
         // 여기서 value는 리스트를 포함하는 Map입니다.
         // value를 리스트로 변환하여 처리합니다.
-        print('진짜 시작');
-        print(routineData.keys);
-        print(routineData.values);
-
         List<dynamic> routinesList = value; // JSON 구조에 따라 적절히 형변환 필요
         routinesList.forEach((routineMap) {
           final routine = Routine.fromJson(routineMap);
           //data.add(routine);
-          print('시작');
-          print(routineMap);
-          print(routine);
           if (routine.user == 'user1') { // routine.user가 'user1'인 경우에만 리스트에 추가
             data.add(routine);
           }
@@ -67,39 +64,10 @@ class WorkoutController extends GetxController { //getx컨트롤러
     } catch (e) {
       print("데이터를 가져오는 중 에러가 발생했습니다: $e");
     }
+
   }
-
-  void DeleteRoutine(String user, int order) async {
-
-    String resultKey = '';
-
-    final url1 = Uri.https(
-      'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
-      'routines.json', //저장될 json 문서명
-    );
-
-    final response = await http.get(url1);
-    final routineData = jsonDecode(response.body) as Map<String, dynamic>;
-
-    routineData.forEach((key, value) {
-      List<dynamic> routinesList = value;
-      routinesList.forEach((routineMap) {
-        if (routineMap['user'] == user && routineMap['order'] == order) {
-          resultKey = key;
-        }
-      });
-    });
-
-
-    final url2 = Uri.https(
-      'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
-      'routines/$resultKey.json', //저장될 json 문서명
-    );
-    await http.delete(url2);
-    fetchWorkouts();
-  }
-
-  void fetchRoutines() async {
+*/
+  void fetchWorkouts2(String user, int order) async { // user와 order를 매개변수로 받음
     final url = Uri.https(
       'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
       'routines.json', //저장된 json 문서명
@@ -110,9 +78,6 @@ class WorkoutController extends GetxController { //getx컨트롤러
       print('response Map으로 변환 (routineData)');
       print(routineData);
 
-      String user = 'user1'; // 추후에 주입하는 방식으로 바꾸기
-      int order = 3; // 위와 같음
-
       final List<Routine> data = [];
       routineData.forEach((key, value) {
         // 여기서 value는 리스트를 포함하는 Map입니다.
@@ -120,10 +85,6 @@ class WorkoutController extends GetxController { //getx컨트롤러
         List<dynamic> routinesList = value; // JSON 구조에 따라 적절히 형변환 필요
         routinesList.forEach((routineMap) {
           final routine = Routine.fromJson(routineMap);
-          //data.add(routine);
-          if (routine.user == 'user1') { // routine.user가 'user1'인 경우에만 리스트에 추가
-            data.add(routine);
-          }
           if(user == routine.user && order == routine.order) {
             routine.workouts.forEach((workout) {
               print('Workout Name: ${workout.workoutName.runtimeType}, Sets: ${workout.sets.runtimeType}, RestTime: ${workout.restTime.runtimeType}, IsActive: ${workout.isActive.runtimeType}');
@@ -132,17 +93,11 @@ class WorkoutController extends GetxController { //getx컨트롤러
               workoutList.assignAll(routine.workouts);
             });
           }
-          // 여기서 routine의 workouts를 출력합니다.
-
         });
       });
 
-      routineList.assignAll(data);
-      //update();
-      //refresh();
     } catch (e) {
       print("데이터를 가져오는 중 에러가 발생했습니다: $e");
     }
   }
-
 }
