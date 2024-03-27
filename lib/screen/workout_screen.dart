@@ -17,7 +17,7 @@ class WorkoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WorkoutController2 workoutController = Get.put(WorkoutController2(user: user, order: order), permanent: false); //중복코드를 줄이기 위해 컨트롤러를 선언해둠
+    final WorkoutController2 workoutController = Get.put(WorkoutController2(user: user, order: order)); //중복코드를 줄이기 위해 컨트롤러를 선언해둠
     
     return Scaffold(
       appBar: AppBar(
@@ -226,6 +226,7 @@ class WorkoutScreen extends StatelessWidget {
                     WorkoutCompletionScreen(),
                     transition: Transition.zoom,
                   );
+                  Get.delete<WorkoutController2>();
                 },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.all(16.0),

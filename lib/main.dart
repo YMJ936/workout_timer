@@ -4,7 +4,7 @@ import 'package:workout_timer/screen/create_test.dart';
 import 'package:workout_timer/screen/routine_select_test.dart';
 import 'package:workout_timer/screen/workout_screen.dart';
 import 'package:workout_timer/screen/workout_completion_screen.dart';
-import 'package:workout_timer/screen/splash_screen.dart';
+import 'package:workout_timer/screen/auth_screen.dart';
 import 'package:workout_timer/screen/routine_select_screen.dart';
 import 'package:workout_timer/screen/routine_create_screen.dart';
 import 'package:workout_timer/screen/test.dart';
@@ -20,7 +20,7 @@ void main() async {
 
   runApp(
       GetMaterialApp(
-        home: RoutineSelectTest(),//WorkoutScreen(),//RoutineSelectScreen(),//WorkoutScreen(),//CreateTest(),
+        home: AuthScreen(),//RoutineSelectTest(),//WorkoutScreen(),//RoutineSelectScreen(),//WorkoutScreen(),//CreateTest(),
       ),
   );
 }

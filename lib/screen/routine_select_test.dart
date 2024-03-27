@@ -6,13 +6,15 @@ import 'package:workout_timer/controller/workout_controller.dart';
 import 'package:workout_timer/screen/create_test.dart';
 import 'package:workout_timer/screen/workout_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RoutineSelectTest extends StatelessWidget {
   const RoutineSelectTest({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final WorkoutController workoutController = Get.put(WorkoutController());
+    final user = FirebaseAuth.instance.currentUser;
+    final WorkoutController workoutController = Get.put(WorkoutController(), permanent: false);
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -60,6 +62,17 @@ class RoutineSelectTest extends StatelessWidget {
           SizedBox(height: 11.0),
           Expanded(
             child: Obx(() {
+              if (workoutController.routineList.isEmpty) {
+                return Center(
+                  child: Text(
+                    "운동 루틴이 없습니다.",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                );
+              }
               return ListView.builder(
                 itemCount: workoutController.routineList.length,
                 itemBuilder: (context, index) {
@@ -102,7 +115,61 @@ class RoutineSelectTest extends StatelessWidget {
                                   )
                               ),
                             ),
-                            PopupMenuButton<String>(
+                            IconButton(
+                              onPressed: () {
+                                Get.defaultDialog(
+                                  title: '경고',
+                                  middleText: '운동 루틴을 삭제하시겠습니까?',
+                                  backgroundColor: Colors.white,
+                                  //buttonColor: COLOR_M,
+                                  onCancel: () => {}, // '취소' 버튼을 눌렀을 때의 동작
+                                  onConfirm: () {
+                                    // '확인' 버튼을 눌렀을 때 원하는 작업을 수행하세요.
+                                    workoutController.DeleteRoutine(routine.user, routine.order);
+                                    Get.back(); // 대화상자를 닫습니다.
+                                  },
+                                  textCancel: '아니오',
+                                  textConfirm: '예',
+                                  confirmTextColor: Colors.white,
+                                );
+                              },/*{
+                                workoutController.DeleteRoutine(routine.user, routine.order);
+                              },*/
+                              icon: Icon(
+                                Icons.close,
+                                size: 27.0,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+/*
+  void DeleteRoutine(/*String user, int order*/) async {
+    // 키값 구하는 로직
+    String targetId = '-NtoxM8jsFkXU2VC701i';
+
+    final url = Uri.https(
+      'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
+      'routines/$targetId.json', //저장될 json 문서명
+    );
+    await http.delete(url);
+    print('삭제하기');
+  }
+ */
+/* 버튼 백업
+PopupMenuButton<String>(
                               onSelected: (String result) {},
                               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                                 PopupMenuItem<String>(
@@ -123,30 +190,5 @@ class RoutineSelectTest extends StatelessWidget {
                                 color: Colors.grey[600],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            }),
-          ),
-        ],
-      ),
-    );
-  }
-/*
-  void DeleteRoutine(/*String user, int order*/) async {
-    // 키값 구하는 로직
-    String targetId = '-NtoxM8jsFkXU2VC701i';
-
-    final url = Uri.https(
-      'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
-      'routines/$targetId.json', //저장될 json 문서명
-    );
-    await http.delete(url);
-    print('삭제하기');
-  }
  */
 }

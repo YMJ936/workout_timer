@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
@@ -24,6 +25,7 @@ class _CreateTest extends State<CreateTest> {
   final GlobalKey<FormState> formKey = GlobalKey();
   final WorkoutMakingController controller = Get.put(WorkoutMakingController());
 
+  final user = FirebaseAuth.instance.currentUser;
   String? routineName;
   final List<WorkoutMakingCard> workoutCards = []; // WorkoutMakingCard 리스트
   String? workoutName;
@@ -32,12 +34,12 @@ class _CreateTest extends State<CreateTest> {
 
   @override
   Widget build(BuildContext context) {
-
     return Form(
       key: formKey,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent, // Make app bar transparent
+          backgroundColor: Colors.transparent,
+          // Make app bar transparent
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -58,99 +60,100 @@ class _CreateTest extends State<CreateTest> {
           ),
           centerTitle: true,
         ),
-        body: Obx(() => Column(
-          children: [
-            SizedBox(height: 5.0,),
-            Padding(
-              padding: const EdgeInsets.only(
-                  bottom: 11.0, left: 9.0, right: 9.0),
-              child: IntrinsicHeight(
-                child: Row(
-                  children: [
-                    const SizedBox(width: 30.0,),
-                    Expanded(
-                      child: CustomTextField(
-                        onSaved: (String? val) {
-                          routineName = val;
-                        },
-                        validator: nameValidator,
-                        label: '루틴 이름',
-                        isTitle: true,
-                      ),
+        body: Obx(() =>
+            Column(
+              children: [
+                SizedBox(height: 5.0,),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 11.0, left: 9.0, right: 9.0),
+                  child: IntrinsicHeight(
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 30.0,),
+                        Expanded(
+                          child: CustomTextField(
+                            onSaved: (String? val) {
+                              routineName = val;
+                            },
+                            validator: nameValidator,
+                            label: '루틴 이름',
+                            isTitle: true,
+                          ),
+                        ),
+                        const SizedBox(width: 30.0,),
+                      ],
                     ),
-                    const SizedBox(width: 30.0,),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: controller.workoutCards.length + 1,
-                itemBuilder: (context, index) {
-                  if (index < controller.workoutCards.length) {
-                    return controller.workoutCards[index];
-                  } else {
-                    return IconButton(
-                      onPressed: () {
-                        controller.addWorkoutCard();
-                      },
-                      icon: Icon(
-                        Icons.add_circle_outline,
-                        size: 80.0,
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  bottom: 11.0, left: 9.0, right: 9.0
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [COLOR_L, COLOR_R],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(15.0),
                 ),
-                child: TextButton(
-                  onPressed: () {
-                    onSavePressed2('user1');
-                    Get.back(result: 'refresh');
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.all(16.0),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: controller.workoutCards.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index < controller.workoutCards.length) {
+                        return controller.workoutCards[index];
+                      } else {
+                        return IconButton(
+                          onPressed: () {
+                            controller.addWorkoutCard();
+                          },
+                          icon: Icon(
+                            Icons.add_circle_outline,
+                            size: 80.0,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 11.0, left: 9.0, right: 9.0
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [COLOR_L, COLOR_R],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '루틴 생성하기',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w500,
+                    child: TextButton(
+                      onPressed: () {
+                        onSavePressed2(user?.email);
+                        Get.back(result: 'refresh');
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.all(16.0),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
                         ),
                       ),
-                    ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '루틴 생성하기',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
         ),
       ),
     );
   }
 
-  /*
+/*
   void findMaxOrderByUser(String user) async {
     final url = Uri.https(
       'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
@@ -187,10 +190,13 @@ class _CreateTest extends State<CreateTest> {
   }
 
   */
-  void onSavePressed2(String user) async {
+  void onSavePressed2(String? email) async {
+    final WorkoutController workoutController = Get.find();
     List<Routine> workoutList = [];
     formKey.currentState!.save();
     int maxOrder = 0;
+
+    String user = email!;
 
     final url = Uri.https(
       'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
@@ -271,9 +277,7 @@ class _CreateTest extends State<CreateTest> {
     print(workoutList);
     List<Map<String, dynamic>> workoutListJson = workoutList.map((routine) => routine.toJson()).toList();
     print(jsonEncode(workoutListJson));
-    save(workoutListJson);
-    final WorkoutController workoutController = Get.find<WorkoutController>();
-    workoutController.fetchRoutines();
+    workoutController.save(workoutListJson);
   }
 
   String? nameValidator(String? val) { //이름값 검증 ?는 해당 값이 null일 수도 있다고 나타내는 기호
@@ -283,7 +287,9 @@ class _CreateTest extends State<CreateTest> {
 
     return null;
   }
+
 }
+
 
 class WorkoutMakingController extends GetxController {
   RxList<Widget> workoutCards = <Widget>[].obs;
@@ -293,7 +299,7 @@ class WorkoutMakingController extends GetxController {
   }
 }
 
-
+/*
 void save(jd) async { //post방식으로 realtime DB에 데이터 전송
   final url = Uri.https(
     'workout-timer-d62e6-default-rtdb.firebaseio.com', // DB엔드포인트
@@ -308,3 +314,4 @@ void save(jd) async { //post방식으로 realtime DB에 데이터 전송
 
 
 }
+ */
